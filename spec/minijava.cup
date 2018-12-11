@@ -1,65 +1,205 @@
 package syntax;
-
 import AST.*;
 import main.OPER; /* enum des operateurs */
 import main.TYPE; /* enum des types primitifs */
 
-terminal DOT, SEP, LC, RC, LP, RP, LB, RB ; 
-terminal PLUS, MINUS, TIMES, LESS, AND, NOT;   
-terminal CLASS, MAIN, PUBLIC, STATIC, VOID, STRING, SYSTEM, OUT, PRINTLN;
-terminal Integer  LIT_INT;
-terminal Boolean TRUE, FALSE;
-terminal String   IDENTIFIER; 
+terminal DOT, COMMA, SEP, LC, RC, LP, RP, LB, RB ;     /* . , ; {}()[] */
+terminal AND, LESS, NOT, TIMES, MINUS, PLUS, ASSIGN ;  /* operateurs */
+terminal BOOLEAN, CLASS, ELSE, EXTENDS, IF, INT, MAIN, NEW ;
+terminal OUT, PRINTLN, PUBLIC, RETURN, STATIC, STRING ;
+terminal SYSTEM, THIS, VOID, WHILE ;
+terminal Integer LIT_INT ;
+terminal Boolean LIT_BOOL ;
+terminal String  IDENTIFIER ; 
 
-non terminal Raxiome    axiome;     
-non terminal RklassMain klassMain;    
-non terminal RidKlass   idKlass;
-non terminal RidVar     idVar;
-non terminal Pinst      inst;
-non terminal Pexpr      expr;
+/* productions basiques */
+nonterminal Raxiome     axiome;     
+nonterminal RklassMain  klassMain;    
+nonterminal Rklass      klass;
+nonterminal Rmethod     method;
+nonterminal RidKlass    idKlass, pid;
+nonterminal RidMeth     idMeth;
+nonterminal RidVar      idVar;
+nonterminal Rfield      field;
+nonterminal Rvar        var;
+nonterminal Rfarg        farg;
+nonterminal Rtype       type;
+  /* productions multiregles = Classes Abstraites */
+nonterminal PmethMember  methMember;
+nonterminal PklassMember klassMember;
+nonterminal Pinst         inst;
+nonterminal Pexpr         exp;
+  /* listes de...  */
+nonterminal Lklass       klasses;      
+nonterminal LklassMember klassMembers;
+nonterminal LmethMember  methMembers;
+nonterminal Lexpr        exps,  exp1;  /* liste avec , */
+nonterminal Lfarg        fargs, farg1; /* liste avec , */
 
+ /* Precedences */
+precedence right  ASSIGN;              /* prec 1  */
+precedence left   AND;                 /* prec 4  */
+precedence left   LESS;                /* prec 9  */
+precedence left   PLUS, MINUS;         /* prec 11 (unary + - are prec14) */
+precedence left   TIMES;               /* prec 12 */
+precedence right  NOT;                 /* prec 14 */
+//precedence nonassoc ELSE;    /* dangling else */
 
-precedence left PLUS,MINUS, TIMES, LESS, AND;
-
-
-axiome    ::= klassMain:a {: RESULT = new Raxiome(a, new Lklass());
-                             RESULT.addPos(axleft,axright);
-			     System.out.println("Hello World!"); :}
+ /* Productions "monoregles" */
+axiome  ::= klassMain:a klasses:z
+                         {: RESULT = new Raxiome(a, z);
+                            RESULT.addPos(axleft,zxright); :}
 ;
-klassMain ::= CLASS:aa idKlass:id LC
+klassMain ::= CLASS:a idKlass:id LC
                  PUBLIC STATIC VOID MAIN LP STRING LB RB idVar:arg RP
                         LC inst:i RC
-              RC:zz
-                          {: RESULT = new RklassMain(id, arg, i);
-			     RESULT.addPos(aaxleft,zzxright); :}
+              RC:z
+                         {: RESULT = new RklassMain(id, arg, i);
+                            RESULT.addPos(axleft,zxright); :}
+;
+klass   ::= CLASS:a idKlass:b pid:c LC klassMembers:d RC:z
+                         {: RESULT = new Rklass(b, c, d);
+                            RESULT.addPos(axleft,zxright); :}
+;
+method  ::= PUBLIC:a type:b idMeth:c LP fargs:d RP LC
+                                methMembers:e
+                                RETURN exp:f SEP
+                        RC:z                    
+                         {: RESULT = new Rmethod(b, c, d, e, f);
+                            RESULT.addPos(axleft,zxright); :}
+;               
+pid     ::= /* empty */  {: RESULT = new RidKlass("Object"); :}
+            | EXTENDS:a idKlass:x 
+                         {: RESULT = x;
+                            RESULT.addPos(axleft,xxright); :}
+;
+idKlass ::= IDENTIFIER:a {: RESULT = new RidKlass(a);
+                            RESULT.addPos(axleft,axright); :}
+;
+idMeth  ::= IDENTIFIER:a {: RESULT = new RidMeth(a);
+                            RESULT.addPos(axleft,axright); :}
+;
+idVar   ::= IDENTIFIER:a {: RESULT = new RidVar(a);
+                            RESULT.addPos(axleft,axright); :} 
+;
+field   ::= type:a idVar:b SEP:x
+                         {: RESULT = new Rfield(a, b);
+                            RESULT.addPos(axleft,xxright); :}
+;
+var     ::= type:a idVar:b SEP:x
+                         {: RESULT = new Rvar(a, b);
+                            RESULT.addPos(axleft,xxright); :} 
+;       
+farg    ::= type:a idVar:x
+                         {: RESULT = new Rfarg(a, x);
+                            RESULT.addPos(axleft,xxright); :} 
+;
+type    ::=  BOOLEAN:a   {: RESULT = new Rtype(TYPE.BOOL);
+                            RESULT.addPos(axleft,axright); :}
+        | INT:a          {: RESULT = new Rtype(TYPE.INT);
+                            RESULT.addPos(axleft,axright); :}
+        | IDENTIFIER:a   {: RESULT = new Rtype(a);
+                            RESULT.addPos(axleft,axright); :}
+; 
+
+/* Classes abstraites P* */
+klassMember ::= field:a {: RESULT = a;
+                           RESULT.addPos(axleft,axright); :}
+            | method:a  {: RESULT = a;
+                           RESULT.addPos(axleft,axright); :}
+;
+methMember ::= var:a    {: RESULT = a;
+                           RESULT.addPos(axleft,axright); :}
+            | inst:a    {: RESULT = a;
+                           RESULT.addPos(axleft,axright); :}
+;
+inst::= LC methMembers:a RC:x   
+                        {: RESULT = new RIblock(a);
+                           RESULT.addPos(axleft,xxright); :}
+    | IF:a LP exp:b RP inst:c ELSE inst:x       
+                        {: RESULT = new RIif(b, c, x);
+                           RESULT.addPos(axleft,xxright); :}
+    | WHILE:a LP exp:b RP inst:x
+                        {: RESULT = new RIwhile(b, x);
+                           RESULT.addPos(axleft,xxright); :}
+    | SYSTEM:a DOT OUT DOT PRINTLN LP exp:b RP SEP:x
+                        {: RESULT = new RIprint(b);
+                           RESULT.addPos(axleft,xxright); :}
+    | idVar:a ASSIGN exp:b SEP:x
+                        {: RESULT = new RIassign(a, b);
+                           RESULT.addPos(axleft,xxright); :}
+;
+exp   ::= exp:a AND exp:x
+                        {: RESULT = new REopBin(a, OPER.AND, x);
+                           RESULT.addPos(axleft,xxright); :}
+        | exp:a LESS exp:x
+                        {: RESULT = new REopBin(a, OPER.LESS, x);
+                           RESULT.addPos(axleft,xxright); :}
+        | exp:a PLUS exp:x
+                        {: RESULT = new REopBin(a, OPER.PLUS, x);
+                           RESULT.addPos(axleft,xxright); :}
+        | exp:a MINUS exp:x     
+                        {: RESULT = new REopBin(a, OPER.MINUS, x);
+                           RESULT.addPos(axleft,xxright); :}
+        | exp:a TIMES exp:x     
+                        {: RESULT = new REopBin(a, OPER.TIMES, x);
+                           RESULT.addPos(axleft,xxright); :}
+        | NOT:a exp:x           
+                        {: RESULT = new REopUn(OPER.NOT, x);
+                           RESULT.addPos(axleft,xxright);  :}
+        | LP:a exp:b RP:x
+                        {: RESULT = b;
+                           RESULT.addPos(axleft,xxright);  :}
+        | idVar:a       {: RESULT = new REvar(a);
+                           RESULT.addPos(axleft,axright);  :}
+        | THIS:a        {: RESULT = new REvar(new RidVar("this"));
+                           RESULT.addPos(axleft,axright);  :}
+        | LIT_BOOL:a    {: RESULT = new REbool(a);
+                           RESULT.addPos(axleft,axright);  :}
+        | LIT_INT:a     {: RESULT = new REint(a);
+                           RESULT.addPos(axleft,axright);  :}
+        | MINUS:a LIT_INT:x
+                        {: RESULT = new REint(-x);
+                           RESULT.addPos(axleft,xxright);  :}
+        | NEW:a idKlass:b LP RP:x
+                        {: RESULT = new REnew(b);
+                           RESULT.addPos(axleft,xxright);  :}
+        | exp:a DOT idMeth:b LP exps:c RP:x
+                        {: RESULT = new REcall(a, b, c);
+                           RESULT.addPos(axleft,xxright);  :}
 ;
 
-klass	::= CLASS::aa idKlass:id EXTEND idKlass:idext LC
-
-			RC
-			{: RESULT = new RklassMain(id, arg, i);
-			     RESULT.addPos(aaxleft,zzxright); :}
-			     
+// Lists and comma-separated lists
+klasses ::= /* empty */      {: RESULT = new Lklass(); :}
+        |  klasses:a klass:x                    
+                             {: RESULT = a; RESULT.addFils(x);
+                                RESULT.addPos(axleft,xxright); :}
+;           
+methMembers ::= /* empty */  {: RESULT = new LmethMember();    :}
+                | methMembers:a methMember:x
+                             {: RESULT = a; RESULT.addFils(x);
+                                RESULT.addPos(axleft,xxright); :}
 ;
-
-inst    ::= SYSTEM:aa DOT OUT DOT PRINTLN LP expr:e RP SEP:zz
-                          {: RESULT = new RIprint(e);
-			     RESULT.addPos(aaxleft,zzxright); :}
+klassMembers ::= /* empty */ {: RESULT = new LklassMember();    :}
+                | klassMembers:a klassMember:x
+                             {: RESULT = a; RESULT.addFils(x);
+                                RESULT.addPos(axleft,xxright);  :}
 ;
-expr    ::= LIT_INT:n     		{: RESULT = new REint(n); RESULT.addPos(nxleft,nxright); :}
-		| TRUE:b 				{: RESULT = new REbool(b); :}
-		| FALSE:b				{: RESULT = new REbool(b); :}
-
-		| expr:e1 PLUS expr:e2 	{: RESULT = new REopBin(e1, main.OPER.PLUS, e2); :}
-		| expr:e1 MINUS expr:e2 {: RESULT = new REopBin(e1, main.OPER.MINUS, e2); :}
-		| expr:e1 TIMES expr:e2 {: RESULT = new REopBin(e1, main.OPER.TIMES, e2); :}
-		| expr:e1 AND expr:e2 	{: RESULT = new REopBin(e1, main.OPER.AND, e2); :}
-		| expr:e1 LESS expr:e2 	{: RESULT = new REopBin(e1, main.OPER.LESS, e2); :}
-		| LP expr:e RP 			{: RESULT = e;	:}
+exps    ::= /* empty */      {: RESULT = new Lexpr();           :}
+        | exp1:a             {: RESULT = a; :}
 ;
-idKlass ::= IDENTIFIER:id {: RESULT = new RidKlass(id);
-			     RESULT.addPos(idxleft,idxright); :}
+exp1    ::= exp:a            {: RESULT = new Lexpr(); RESULT.addFils(a);
+                                RESULT.addPos(axleft,axright);  :}
+        | exp1:a COMMA exp:x
+                             {: RESULT = a; RESULT.addFils(x);
+                                RESULT.addPos(axleft,xxright);  :}
 ;
-idVar   ::= IDENTIFIER:id {: RESULT = new RidVar(id);  
-			     RESULT.addPos(idxleft,idxright); :}
+fargs   ::= /* empty */      {: RESULT = new Lfarg();                    :}
+        | farg1:a            {: RESULT = a; :}
 ;
+farg1   ::= farg:a           {: RESULT = new Lfarg();  RESULT.addFils(a);
+                                RESULT.addPos(axleft,axright);  :}
+        | farg1:a COMMA farg:x
+                             {: RESULT = a;   RESULT.addFils(x);
+                                RESULT.addPos(axleft,xxright);  :}
+;        

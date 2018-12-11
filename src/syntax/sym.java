@@ -8,39 +8,50 @@ package syntax;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int TIMES = 12;
-  public static final int AND = 14;
-  public static final int CLASS = 16;
-  public static final int PLUS = 10;
-  public static final int LP = 6;
-  public static final int RP = 7;
-  public static final int NOT = 15;
-  public static final int IDENTIFIER = 28;
-  public static final int TRUE = 26;
-  public static final int PUBLIC = 18;
-  public static final int STATIC = 19;
-  public static final int LC = 4;
-  public static final int LB = 8;
-  public static final int RC = 5;
-  public static final int LIT_INT = 25;
-  public static final int STRING = 21;
-  public static final int RB = 9;
-  public static final int EOF = 0;
-  public static final int PRINTLN = 24;
-  public static final int MAIN = 17;
-  public static final int SYSTEM = 22;
-  public static final int FALSE = 27;
-  public static final int SEP = 3;
-  public static final int MINUS = 11;
-  public static final int error = 1;
+  public static final int SEP = 4;
+  public static final int LIT_INT = 36;
+  public static final int INT = 23;
+  public static final int PRINTLN = 27;
+  public static final int OUT = 26;
+  public static final int LESS = 12;
+  public static final int MINUS = 15;
+  public static final int STATIC = 30;
+  public static final int NOT = 13;
+  public static final int AND = 11;
+  public static final int LP = 7;
+  public static final int COMMA = 3;
+  public static final int CLASS = 19;
+  public static final int RP = 8;
+  public static final int PLUS = 16;
+  public static final int ASSIGN = 17;
+  public static final int MAIN = 24;
+  public static final int IF = 22;
+  public static final int THIS = 33;
   public static final int DOT = 2;
-  public static final int OUT = 23;
-  public static final int VOID = 20;
-  public static final int LESS = 13;
+  public static final int EOF = 0;
+  public static final int BOOLEAN = 18;
+  public static final int LC = 5;
+  public static final int SYSTEM = 32;
+  public static final int LB = 9;
+  public static final int RETURN = 29;
+  public static final int NEW = 25;
+  public static final int error = 1;
+  public static final int RC = 6;
+  public static final int RB = 10;
+  public static final int VOID = 34;
+  public static final int TIMES = 14;
+  public static final int ELSE = 20;
+  public static final int WHILE = 35;
+  public static final int PUBLIC = 28;
+  public static final int EXTENDS = 21;
+  public static final int LIT_BOOL = 37;
+  public static final int STRING = 31;
+  public static final int IDENTIFIER = 38;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
   "DOT",
+  "COMMA",
   "SEP",
   "LC",
   "RC",
@@ -48,24 +59,33 @@ public class sym {
   "RP",
   "LB",
   "RB",
-  "PLUS",
-  "MINUS",
-  "TIMES",
-  "LESS",
   "AND",
+  "LESS",
   "NOT",
+  "TIMES",
+  "MINUS",
+  "PLUS",
+  "ASSIGN",
+  "BOOLEAN",
   "CLASS",
+  "ELSE",
+  "EXTENDS",
+  "IF",
+  "INT",
   "MAIN",
-  "PUBLIC",
-  "STATIC",
-  "VOID",
-  "STRING",
-  "SYSTEM",
+  "NEW",
   "OUT",
   "PRINTLN",
+  "PUBLIC",
+  "RETURN",
+  "STATIC",
+  "STRING",
+  "SYSTEM",
+  "THIS",
+  "VOID",
+  "WHILE",
   "LIT_INT",
-  "TRUE",
-  "FALSE",
+  "LIT_BOOL",
   "IDENTIFIER"
   };
 }

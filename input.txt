@@ -1,5 +1,10 @@
-class Test102 {
+class Test103 {
 	public static void main(String[] args) {
-		System.out.println(5+4);
+		System.out.println(new Test2().Start(9));
+	}
+}
+class Test2 {
+	public int Start(int y) {
+		return y;
 	}
 }

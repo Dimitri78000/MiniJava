@@ -1,0 +1,21 @@
+<project name="Mars" basedir="." default="mars">
+<description>
+  Excution Mars sur fichier Mips / Lancement IDE Mars
+</description>
+
+<property name="libMars"   value="lib/mars.jar" />
+<property name="MARSARG"   value="input.mips" />
+
+<target name="mars" description="Execution Mars" >
+  <java jar="${libMars}" fork="true" >
+    <arg line="${MARSARG}" />
+  </java>
+</target>
+
+<target name="marsIDE" description="IDE Mars" >
+  <java jar="${libMars}" fork="true" >
+    <arg line="" />
+  </java>
+</target>
+
+</project>

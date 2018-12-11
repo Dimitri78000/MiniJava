@@ -1,0 +1,68 @@
+==> IRProg.java <==
+/** Intermediate Program = List < IRQuadruple > */
+public class IRProg {
+	public List<IRQuadruple> prog;
+	public int size()
+	public IRQuadruple get(int i)
+	public void add(IRQuadruple q)
+	public void append(IRProg IRprog)
+	public void print()
+}
+
+==> IRQuadruple.java <==
+public abstract class IRQuadruple { 
+	public OPER op;
+	public Variable arg1;
+	public Variable arg2;
+	public Variable result;
+	public abstract String toString();
+}	
+
+==> Q*.java <==
+/** <b>QAssign :</b> <br> result = arg1 op arg2  */
+public QAssign(OPER op, Variable arg1, Variable arg2, Variable result)
+
+/** <b>QAssignUnary :</b> <br> result = op arg1 */
+public QAssignUnary(OPER op, Variable arg1, Variable result)	
+
+/** <b>QCall :</b> <br> result = call arg1 [numParams=arg2] */
+public QCall(Variable arg1, Variable arg2, Variable result)
+
+/** <b>QCopy :</b> <br>result = arg1 */
+public QCopy(Variable arg1, Variable result)
+
+/** <b>QJump :</b> <br> Jump arg1 */
+public QJump(Variable arg1)
+
+/** <b>QJumpCond : </b> <br> Jump arg1 IfNot arg2 */
+public QJumpCond(Variable arg1, Variable arg2)	
+
+/** <b>QLabel : </b> <br>Label arg1 */
+public QLabel(Variable arg1)
+
+/** <b>QLabelMeth : </b> <br>Label arg1 */
+public QLabelMeth(Variable arg1)
+
+/** <b>QNew : </b> <br> result = new arg1 */
+public QNew(Variable arg1, Variable result)	
+
+/** <b>QParam : </b> <br> Param arg1 */
+public QParam(Variable arg1)
+
+/** <b>QReturn :</b> <br> Return arg1 */
+public QReturn(Variable arg1)
+
+// + Integer Array
+/** <b>QAssignArrayFrom :</b> <br> result = arg1[arg2] */
+public QAssignArrayFrom(Variable arg1, Variable arg2, Variable result)	
+
+/** <b>QAssignArrayTo :</b> <br>result[arg2] = arg1 */
+public QAssignArrayTo(Variable arg1, Variable arg2, Variable result)
+
+/** <b>QLength :</b> <br> result = length arg1 */
+public QLength(Variable arg1, Variable result)	
+
+/** <b>QNewArray : </b> <br> result = new arg1 [Size=arg2] */
+public QNewArray(Variable arg1, Variable arg2, Variable result)
+
+

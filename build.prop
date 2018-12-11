@@ -1,0 +1,22 @@
+# Proprietes pour build Ant project minijava
+#    name    description    || default value
+
+#    NAME     Nom de base des specs || undef 
+NAME=spec/minijava
+
+#    SRCJFLEX Nom spec Jflex }} $${NAME}.jflex
+
+#    SRCCUP   Nom spec Cup   || $${NAME}.cuo  
+
+#    CUPOPT   Options supplementaire pour CUP || ||${CUPOPT}
+CUPOPT=-locations
+
+#    PKG      Package Java des classes Jflex et Cup || 
+PKG=syntax
+
+#    MAIN     Classe main() || CupMain 
+MAIN=main.Compil
+
+#    ARGS     Arguments du main() || 
+ARGS=input.txt
+

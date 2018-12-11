@@ -1,0 +1,19 @@
+Biblioteque pour Jflex + Cup + Mars/mips
+
+jflex.jar  :
+    Version 1.7.0
+    Commande jflex = java -jar jflex.jar ...
+    
+java-cup.jar :
+    Version 11b-20160615
+    Commande cup = java -jar java-cup.jar ...
+
+java-cup-runtime.jar :
+    Version 11b-20160615 = download + sources .java
+    Runtime Package "java-cup.runtime"  requis pour le code produit par CUp
+    CLASSPATH = .../java-xup-runtime.jar:...
+    
+mars.jar :
+    Version 4_5 = Download - Sources .java - Docs APU
+    Commande mars = java -jar mars.jar               => Interface graphique
+                    java -jar mars.jar fichier.mips  => Execution directe

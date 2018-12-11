@@ -1,0 +1,65 @@
+package syntax;
+
+import AST.*;
+import main.OPER; /* enum des operateurs */
+import main.TYPE; /* enum des types primitifs */
+
+terminal DOT, SEP, LC, RC, LP, RP, LB, RB ; 
+terminal PLUS, MINUS, TIMES, LESS, AND, NOT;   
+terminal CLASS, MAIN, PUBLIC, STATIC, VOID, STRING, SYSTEM, OUT, PRINTLN;
+terminal Integer  LIT_INT;
+terminal Boolean TRUE, FALSE;
+terminal String   IDENTIFIER; 
+
+non terminal Raxiome    axiome;     
+non terminal RklassMain klassMain;    
+non terminal RidKlass   idKlass;
+non terminal RidVar     idVar;
+non terminal Pinst      inst;
+non terminal Pexpr      expr;
+
+
+precedence left PLUS,MINUS, TIMES, LESS, AND;
+
+
+axiome    ::= klassMain:a {: RESULT = new Raxiome(a, new Lklass());
+                             RESULT.addPos(axleft,axright);
+			     System.out.println("Hello World!"); :}
+;
+klassMain ::= CLASS:aa idKlass:id LC
+                 PUBLIC STATIC VOID MAIN LP STRING LB RB idVar:arg RP
+                        LC inst:i RC
+              RC:zz
+                          {: RESULT = new RklassMain(id, arg, i);
+			     RESULT.addPos(aaxleft,zzxright); :}
+;
+
+klass	::= CLASS::aa idKlass:id EXTEND idKlass:idext LC
+
+			RC
+			{: RESULT = new RklassMain(id, arg, i);
+			     RESULT.addPos(aaxleft,zzxright); :}
+			     
+;
+
+inst    ::= SYSTEM:aa DOT OUT DOT PRINTLN LP expr:e RP SEP:zz
+                          {: RESULT = new RIprint(e);
+			     RESULT.addPos(aaxleft,zzxright); :}
+;
+expr    ::= LIT_INT:n     		{: RESULT = new REint(n); RESULT.addPos(nxleft,nxright); :}
+		| TRUE:b 				{: RESULT = new REbool(b); :}
+		| FALSE:b				{: RESULT = new REbool(b); :}
+
+		| expr:e1 PLUS expr:e2 	{: RESULT = new REopBin(e1, main.OPER.PLUS, e2); :}
+		| expr:e1 MINUS expr:e2 {: RESULT = new REopBin(e1, main.OPER.MINUS, e2); :}
+		| expr:e1 TIMES expr:e2 {: RESULT = new REopBin(e1, main.OPER.TIMES, e2); :}
+		| expr:e1 AND expr:e2 	{: RESULT = new REopBin(e1, main.OPER.AND, e2); :}
+		| expr:e1 LESS expr:e2 	{: RESULT = new REopBin(e1, main.OPER.LESS, e2); :}
+		| LP expr:e RP 			{: RESULT = e;	:}
+;
+idKlass ::= IDENTIFIER:id {: RESULT = new RidKlass(id);
+			     RESULT.addPos(idxleft,idxright); :}
+;
+idVar   ::= IDENTIFIER:id {: RESULT = new RidVar(id);  
+			     RESULT.addPos(idxleft,idxright); :}
+;

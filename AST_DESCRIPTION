@@ -1,0 +1,52 @@
+/* Classes Abstraites 
+   Pexpr = "Expressions" ; Abstract for RE*
+   Pinst = "Instructions"; Abstract for RI*
+   PklassMember ; Abstract for ( Rmethod | Rfield )
+   PmethMember ; Abstract for ( Pinst | Rvar )
+*/
+
+/////////////////// Visit ////////////////////
+/// Listes homogenes : ASTList<R>
+   /** Lexpr == ASTList<Pexpr> */
+   /** Lfarg == ASTList<Rfarg> */
+   /** Lklass == ASTList<Rklass> */
+   /** LklassMember == ASTList<RklassMember> */
+   /** LmethMember == ASTList<RmethMember> */
+
+/// Bases
+   /** Raxiome : RklassMain km; Lklass kl; */
+   /** Rfarg : Rtype t; RidVar id; */
+   /** Rfield : Rtype t; RidVar id; */
+   /** RidKlass : String s; */
+   /** RidMeth : String s; */
+   /** RidVar : String s; */
+   /** Rklass : RidKlass id; RidKlass pid; LklassMember kml;*/
+   /** RklassMain : RidKlass id; RidVar arg; Pinst s; */
+   /** Rmethod : Rtype t; RidMeth id; Lfarg fl; LmethMember mml; Pexpr e; */ 
+   /** Rtype  : String s; NB: constructeur additionel Rtype(main.TYPE t) */
+   /** Rvar : Rtype t; RidVar id; */
+
+/// "Expressions" = RE*
+   /** REbool : Boolean b; */
+   /** REcall : Pexpr e; RidMeth id; Lexpr el; */
+   /** REint : Integer i; */
+   /** REnew : RidKlass id; */
+   /** REopBin : Pexpr e1; main.OPER op; Pexpr e2; */
+   /** REopUn : main.OPER op; Pexpr e; */
+   /** REvar : RidVar id; */
+ // arrays
+   /** REarray : Pexpr e1; Pexpr e2; */
+   /** RElen: Pexpr e; */
+   /** REnewArray : Pexpr e; */
+
+/// "Instructions" =  RI* 
+    /** RIassign : RidVar id; Pexpr e; */
+    /** RIblock : LmethMember mml; */ 
+    /** RIif : Pexpr e; Pinst s1; Pinst s2; */
+    /** RIprint : Pexpr e; */
+    /** RIwhile : Pexpr e; Pinst s; */
+ // arrays
+    /** RIassignArray : RidVar id; Pexpr e1; Pexpr e2; */
+
+/// Testing
+    /** AST : String label*/

@@ -1,0 +1,70 @@
+	.text
+	# label main
+main:
+	# param null
+	# call _system_out_println<1>
+	addi $sp, $sp, -8
+	sw $v0, 4($sp)
+	sw $a0, 0($sp)
+	li $a0,  null
+	jal _system_out_println
+	lw $v0, 4($sp)
+	lw $a0, 0($sp)
+	addi $sp, $sp, 8
+	# call _system_exit<0>
+	jal _system_exit
+##### RUNTIME for MIPES #####
+#  _system_exit(),          #
+#  _system_out_println(int) #
+#  _new_object(int),        #
+#  _new_array(int)          #
+#############################
+_system_exit:
+        li $v0, 10 #exit
+        syscall    
+
+_system_out_println:  # $a0: integer to print
+        li  $v0, 1    # print integer
+        syscall
+        li $a0, 10    # newline
+        li $v0, 11    # print car
+        syscall
+        jr $ra
+
+_new_object:         # $a0: Number of bytes, $v0 allocated memory address
+        li $v0, 9    # sbrk     
+        syscall
+      ## initialize with zeros
+        move $t0, $a0
+        move $t1, $v0
+_new_object_loop:
+        beq $t0, $zero, _new_object_exit
+        sb $zero, 0($t1)
+        addi $t1, $t1, 1
+        addi $t0, $t0, -1
+        j _new_object_loop
+_new_object_exit:
+        jr $ra
+        
+_new_array:  # $a0: Number of bytes
+             # $v0: allocated memory address
+             # allocated Bytes = $a0 +4 , offset(0)== Number of int = $a0/4
+        addi $a0, $a0, 4 # add space for size
+        li $v0, 9 # sbrk
+        syscall
+      ## initialize with zeros
+        move $t0, $a0
+        move $t1, $v0
+_new_array_loop:
+        beq $t0, $zero, _new_array_exit
+        sb $zero, 0($t1)
+        addi $t1, $t1, 1
+        addi $t0, $t0, -1
+        j _new_array_loop
+_new_array_exit:
+      ## store the size (number of ints) in offset 0
+        addi $t0, $a0, -4 
+        sra $t0, $t0, 2
+        sw $t0, 0($v0)
+        jr $ra
+##EOF##

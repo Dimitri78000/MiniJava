@@ -18,6 +18,8 @@ public int Compute() {
 //	String s;       // Stinrg only in main
 //	String[] args;  // only in main, (and not usable)
 //	int this;       // this reserved keyword
+	int a;
+	//a = 4 + 8 * true;
 	return 0;
 	}
 }

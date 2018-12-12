@@ -65,6 +65,17 @@ public class TypeChecking extends ASTVisitorDefault {
     }
 
     /////////////////// Visit ////////////////////
+    
+    /** Raxiome : RklassMain km; Lklass kl; */
+    /** Rfarg : Rtype t; RidVar id; */
+    /** Rfield : Rtype t; RidVar id; */
+    /** RidMeth : String s; */
+    /** Rklass : RidKlass id; RidKlass pid; LklassMember kml;*/
+    /** RklassMain : RidKlass id; RidVar arg; Pinst s; */
+    /** Rtype  : String s; NB: constructeur additionel Rtype(main.TYPE t) */
+    /** Rvar : Rtype t; RidVar id; */
+    
+    
     /** RidKlass : String s; */
     public void visit(RidKlass n) {
 	setType(n,n.s);	   // Type = ClassName 
@@ -144,18 +155,18 @@ public class TypeChecking extends ASTVisitorDefault {
 	case PLUS:
 	case MINUS:
 	case TIMES:
-	    checkType(INT,n.e1,msg+" (letf)",n);
-	    checkType(INT,n.e2,msg+" (right)",n);
+	    checkType(INT,n.e1,msg+" (letf), put int",n);
+	    checkType(INT,n.e2,msg+" (right), put int",n);
 	    setType(n, INT);
-			break;
+		break;
 	case AND:
-	    checkType(BOOL,n.e1,msg+" (letf)",n);
-	    checkType(BOOL,n.e2,msg+" (right)",n);
+	    checkType(BOOL,n.e1,msg+" (letf), put bool",n);
+	    checkType(BOOL,n.e2,msg+" (right), put bool",n);
 	    setType(n, BOOL);
 	    break;
 	case LESS:
-	    checkType(INT,n.e1,msg+" (letf)",n);
-	    checkType(INT,n.e2,msg+" (right)",n);
+	    checkType(INT,n.e1,msg+" (letf), put int",n);
+	    checkType(INT,n.e2,msg+" (right), put int",n);
 	    setType(n, BOOL);
 	    break;
 	default:

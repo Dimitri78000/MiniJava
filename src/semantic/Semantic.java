@@ -1,5 +1,7 @@
 package semantic;
 
+import generateIR.GenerateIR;
+
 public class Semantic {
     public SemanticTree semanticTree;
     
@@ -21,6 +23,8 @@ public class Semantic {
             System.out.println("=== SYMBOL TABLE ===");
             semanticTree.rootScope.print("");
         }
+        
+        GenerateIR GenIR = new GenerateIR(semanticTree);
         
         // Loop checking in Classes
         CheckLoop cl=new CheckLoop(semanticTree);

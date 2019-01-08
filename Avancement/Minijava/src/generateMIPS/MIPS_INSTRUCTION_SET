@@ -1,0 +1,40 @@
+Instructions MIPS (mars) utilisées :
+
+"li   " + r0 + ", " + immediate 
+"lw   " + r0 + ", " + offset + "(" + r1 + ")"
+"sw   " + r0 + ", " + offset + "(" + r1 + ")"
+"move " + r0 + ", " + r1   == "addiu "+ r0 +", " + r1 +", 0"
+"beq  " + r0 + ", $zero, " + name
+"j    " + name
+"jal  " + name
+"jr $ra"
+"addi " + r0 + ", " + r0 + ", " + immediate
+"sll  " + r0 + ", " + r0 + ", 2"
+"add  " + r0 + ", " + r0 + ", " + r1
+"sub  " + r0 + ", " + r0 + ", " + r1
+"mult " + r0 + ", " + r1
+"mflo " + r0
+"and  " + r0 + ", " + r0 + ", " + r1
+"slt  " + r0 + ", " + r0 + ", " + r1
+"seq  " + r0 + ", $zero, " + r0
+
+-------------------------------------------
+Utilisation des resgisters MIPS :
+
+$gp      Reference aux variables globales.
+	 Valeur fixe
+$fp      Reference aux variables locales d'une méthode
+         Positionné par l'appelant,
+	 Sauvegardé par l'appelant
+$sp      La pile ...
+$ra  l   Adressse de retour
+	 Sauvegardés par l'appelé
+$a0-$a4  Les 4 premiers arguments d'une méthode.
+	 $a0=this
+	 Sauvegardés par l'appelant
+$v0 $v1  Libres pour calculs temporaires (au sein d'une instruction IR)
+         non suavegardés
+$s0-$s7  Non utilisés, mais disponibles si besoin 
+	 Sauvegardés par l'appelé
+$t0-$t9  Non utilisśs, mais disponibles su besoin
+	 Sauvegardés par l'appelant

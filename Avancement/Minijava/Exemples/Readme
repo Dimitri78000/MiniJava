@@ -1,0 +1,32 @@
+Official Exampples from "Modern Compilation in Java"
+Modern/*
+
+Basic incremental MileStone :
+Test101.java
+Test102.java
+Test103.java
+Test104.java
+Test105.java
+Test109.java Arrays
+
+Runing exemples
+Test201.java  Operators
+Test202.java  Exressions and Variables
+Test203.java  ..
+Test204.java  Arrays
+
+Syntax Error
+Test301.java  Stress test, synaxiquement correct
+Test302.java  Erreurs Lexicales
+Test301.java  Syntax Error
+
+Semantic Error
+Test401.java   Type checking
+Test402.java   Type checking and Arrays
+Test403.java   Method Call
+Test404.java   Class inheritence
+Test405.java   Undefine checking, ...
+
+!!! Under Testing !!!
+Test901.java   inhetitence, overide, .....
+

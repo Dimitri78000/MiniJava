@@ -1,0 +1,250 @@
+.text
+# label main
+main:
+# t_0 := new calcul
+	addi $sp, $sp, -4
+	sw   $a0, 0($sp)
+	li   $a0, 0
+	jal  _new_object
+	sw   $v0, 0($gp)
+	lw   $a0, 0($sp)
+	addi $sp, $sp, 4
+# param t_0
+# param 3
+# param 2
+# t_1 := call Ackermann<3>
+	addi $sp, $sp, -20
+	sw   $fp, 16($sp)
+	sw   $a3, 12($sp)
+	sw   $a2, 8($sp)
+	sw   $a1, 4($sp)
+	sw   $a0, 0($sp)
+	lw   $a0, 0($gp)
+	li   $a1, 3
+	li   $a2, 2
+	move $fp, $sp
+	addi $sp, $sp, -88
+	jal  Ackermann
+	move $sp, $fp
+	lw   $fp, 16($sp)
+	lw   $a3, 12($sp)
+	lw   $a2, 8($sp)
+	lw   $a1, 4($sp)
+	lw   $a0, 0($sp)
+	addi $sp, $sp, 20
+	sw   $v0, 4($gp)
+# param t_1
+# call _system_out_println<1>
+	addi $sp, $sp, -4
+	sw   $a0, 0($sp)
+	lw   $a0, 4($gp)
+	jal  _system_out_println
+	lw   $a0, 0($sp)
+	addi $sp, $sp, 4
+# call _system_exit<0>
+	jal  _system_exit
+# label Ackermann
+Ackermann:
+	sw   $ra ,  -4($fp)
+# t_2 := 0 LESS m
+	li   $v0, 0
+	move $v1, $a1
+	slt  $v0, $v0, $v1
+	sw   $v0, -44($fp)
+# t_3 := 0 LESS n
+	li   $v0, 0
+	move $v1, $a2
+	slt  $v0, $v0, $v1
+	sw   $v0, -48($fp)
+# t_4 := t_2 AND t_3
+	lw   $v0, -44($fp)
+	lw   $v1, -48($fp)
+	and  $v0, $v0, $v1
+	sw   $v0, -52($fp)
+# iffalse t_4 goto L_0
+	lw   $v0, -52($fp)
+	beq  $v0, $zero, L_0
+# t_5 := m MINUS 1
+	move $v0, $a1
+	li   $v1, 1
+	sub  $v0, $v0, $v1
+	sw   $v0, -56($fp)
+# t_6 := n MINUS 1
+	move $v0, $a2
+	li   $v1, 1
+	sub  $v0, $v0, $v1
+	sw   $v0, -60($fp)
+# param this
+# param m
+# param t_6
+# t_7 := call Ackermann<3>
+	addi $sp, $sp, -20
+	sw   $fp, 16($sp)
+	sw   $a3, 12($sp)
+	sw   $a2, 8($sp)
+	sw   $a1, 4($sp)
+	sw   $a0, 0($sp)
+	lw   $a0, 0($sp)
+	lw   $a1, 4($sp)
+	lw   $a2, -60($fp)
+	move $fp, $sp
+	addi $sp, $sp, -88
+	jal  Ackermann
+	move $sp, $fp
+	lw   $fp, 16($sp)
+	lw   $a3, 12($sp)
+	lw   $a2, 8($sp)
+	lw   $a1, 4($sp)
+	lw   $a0, 0($sp)
+	addi $sp, $sp, 20
+	sw   $v0, -64($fp)
+# param this
+# param t_5
+# param t_7
+# t_8 := call Ackermann<3>
+	addi $sp, $sp, -20
+	sw   $fp, 16($sp)
+	sw   $a3, 12($sp)
+	sw   $a2, 8($sp)
+	sw   $a1, 4($sp)
+	sw   $a0, 0($sp)
+	lw   $a0, 0($sp)
+	lw   $a1, -56($fp)
+	lw   $a2, -64($fp)
+	move $fp, $sp
+	addi $sp, $sp, -88
+	jal  Ackermann
+	move $sp, $fp
+	lw   $fp, 16($sp)
+	lw   $a3, 12($sp)
+	lw   $a2, 8($sp)
+	lw   $a1, 4($sp)
+	lw   $a0, 0($sp)
+	addi $sp, $sp, 20
+	sw   $v0, -68($fp)
+# resu := t_8
+	lw   $v0, -68($fp)
+	sw   $v0, -40($fp)
+# goto L_1
+	j    L_1
+# label L_0
+L_0:
+# t_9 := 0 LESS n
+	li   $v0, 0
+	move $v1, $a2
+	slt  $v0, $v0, $v1
+	sw   $v0, -72($fp)
+# t_10 := NOT t_9
+	lw   $v0, -72($fp)
+	seq  $v0, $zero, $v0
+	sw   $v0, -76($fp)
+# iffalse t_10 goto L_2
+	lw   $v0, -76($fp)
+	beq  $v0, $zero, L_2
+# t_11 := m MINUS 1
+	move $v0, $a1
+	li   $v1, 1
+	sub  $v0, $v0, $v1
+	sw   $v0, -80($fp)
+# param this
+# param t_11
+# param 1
+# t_12 := call Ackermann<3>
+	addi $sp, $sp, -20
+	sw   $fp, 16($sp)
+	sw   $a3, 12($sp)
+	sw   $a2, 8($sp)
+	sw   $a1, 4($sp)
+	sw   $a0, 0($sp)
+	lw   $a0, 0($sp)
+	lw   $a1, -80($fp)
+	li   $a2, 1
+	move $fp, $sp
+	addi $sp, $sp, -88
+	jal  Ackermann
+	move $sp, $fp
+	lw   $fp, 16($sp)
+	lw   $a3, 12($sp)
+	lw   $a2, 8($sp)
+	lw   $a1, 4($sp)
+	lw   $a0, 0($sp)
+	addi $sp, $sp, 20
+	sw   $v0, -84($fp)
+# resu := t_12
+	lw   $v0, -84($fp)
+	sw   $v0, -40($fp)
+# goto L_3
+	j    L_3
+# label L_2
+L_2:
+# t_13 := n PLUS 1
+	move $v0, $a2
+	li   $v1, 1
+	add  $v0, $v0, $v1
+	sw   $v0, -88($fp)
+# resu := t_13
+	lw   $v0, -88($fp)
+	sw   $v0, -40($fp)
+# label L_3
+L_3:
+# label L_1
+L_1:
+# return resu
+	lw   $ra ,  -4($fp)
+	lw   $v0, -40($fp)
+	jr $ra
+##### RUNTIME for MIPS ######
+#  _system_exit(),          #
+#  _system_out_println(int) #
+#  _new_object(int),        #
+#  _new_array(int)          #
+#############################
+_system_exit:
+        li   $v0, 10 #exit
+        syscall    
+
+_system_out_println:  # $a0: integer to print
+        li   $v0, 1   # print integer
+        syscall
+        li   $a0, 10  # newline
+        li   $v0, 11  # print car
+        syscall
+        jr   $ra
+
+_new_object:          # $a0: Number of bytes, $v0 allocated memory address
+        li   $v0, 9   # sbrk     
+        syscall
+     ## initialize with zeros
+        move $t0, $a0
+        move $t1, $v0
+__loop0:
+        beq  $t0, $zero, __exit0
+        sb   $zero, 0($t1)
+        addi $t1, $t1, 1
+        addi $t0, $t0, -1
+        j    __loop0
+__exit0:
+        jr   $ra
+        
+_new_array:  # $a0: Number of bytes
+             # $v0: allocated memory address
+             # allocated Bytes = $a0 + 4 , offset(0)== Number of int = $a0/4
+        addi $a0, $a0, 4  # add space for size
+        li   $v0, 9       # sbrk
+        syscall
+     ## initialize with zeros
+        move $t0, $a0
+        move $t1, $v0
+__loop1:
+        beq  $t0, $zero, __exit1
+        sb   $zero, 0($t1)
+        addi $t1, $t1, 1
+        addi $t0, $t0, -1
+        j    __loop1
+__exit1:
+     ## store the size (number of ints) in offset 0
+        addi $t0, $a0, -4 
+        sra  $t0, $t0, 2
+        sw   $t0, 0($v0)
+        jr   $ra
+##EOF##
